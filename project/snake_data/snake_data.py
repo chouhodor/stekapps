@@ -7,7 +7,7 @@ snake_data_bp = Blueprint('snake_data', __name__, url_prefix='/snake-data', temp
 @snake_data_bp.route('/')
 def index():
 
-    snake_list = []
+    snake_data = []
 
     return render_template('snake_index.html')
 
@@ -16,34 +16,59 @@ def get_snake_list():
 
     region = request.form['region']
 
-    snake_list = Snake_location.query.filter_by(location=region).all()
+    data_list = []
 
-    return redirect(url_for('index'),
-    snake_list=snake_list
+    if request.method == 'POST':
+        snake_list = Snake_location.query.filter_by(state=region).all()
+
+        for s in snake_list:
+            data_list.append(s.snake_id)
+
+        snake_data = [Snakes.query.get(i) for i in data_list]
+
+        snake_data = [a.name_en for a in snake_data]
+
+        return render_template('snake_index.html',
+        snake_data=snake_data,
+        region=region
+        )
+
+@snake_data_bp.route('/get_snake_family', methods=['POST'])
+def get_snake_family():
+
+    family = request.form['family']
+
+    data_list = []
+
+    if request.method == 'POST':
+        snake_list = Snakes.query.filter_by(family=family).all()
+
+        for s in snake_list:
+            data_list.append(s.name_en)
+
+        snake_data = data_list
+
+        return render_template('snake_index.html',
+        snake_data=snake_data,
+        family=family
+        )
+
+@snake_data_bp.route('/snake_info/<int:id>')
+def snake_info(id):
+
+    snake_intel = Snakes.query.get(id)
+
+    return render_template('snake_info.html',
+    snake_intel=snake_intel
     )
 
 
 @snake_data_bp.route('/test')
 def test():
 
-    #Job.query.filter(Job.id.notin_([j.id for j in person.jobs]))
 
-    snake_list = Snake_location.query.filter_by(state='pahang').all()
+    snake_list = Snakes.query.get(3)
 
-    #snake_data = Snake_location.query.filter(Snake_location.id.in_(snake_id.locations))
-
-    data_list = []
-
-    for s in snake_list:
-        data_list.append(s.snake_id)
-
-    snake_data = [Snakes.query.get(i) for i in data_list]
-
-    snake_names = [a.name_en for a in snake_data]
-
-    print(snake_names)
-
-
-
+    print(snake_list)
 
     return render_template('snake_index.html')
