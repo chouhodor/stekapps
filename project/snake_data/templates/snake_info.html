@@ -24,8 +24,16 @@
     <li class="list-group-item">Location: {{snake_intel.snake_location}}</li>
     <li class="list-group-item">Habitat: {{snake_intel.habitat}}</li>
     <li class="list-group-item">Circadian rhythm: {{snake_intel.circadian}}</li>
+    
     <li class="list-group-item">Venom status: {{snake_intel.venom_status}}</li>
-    <li class="list-group-item">Type of Antivenom: {{snake_intel.antivenom}}</li>
+    <!--<li class="list-group-item">Type of Antivenom: {{snake_intel.antivenom}}-->
+    
+    <li class="list-group-item">
+      {% for a in antivenom_list %}
+      <h1>{{snake_intel.id}} {{ a }}</h1>
+      {% endfor %}
+    </li>
+    
     <li class="list-group-item">MyBIS info: {{snake_intel.mybis}}</li>
   </ul>
   <!--<div class="card-body">

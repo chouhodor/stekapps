@@ -55,11 +55,17 @@ def get_snake_family():
 
 @snake_data_bp.route('/snake_info/<int:id>')
 def snake_info(id):
+    def convert(string):
+        li = list(string.split(","))
+        return li
 
     snake_intel = Snakes.query.get(id)
+    
+    antivenom_list = convert(snake_intel.antivenom)
 
     return render_template('snake_info.html',
-    snake_intel=snake_intel
+    snake_intel=snake_intel,
+    antivenom_list=antivenom_list
     )
 
 
